@@ -1,0 +1,89 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center mb-0">Inscription</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Nom d'utilisateur</label>
+              <input 
+                type="text" 
+                class="form-control"
+                [class.is-invalid]="usernameInput.invalid && usernameInput.touched"
+                id="username"
+                name="username"
+                [(ngModel)]="user.username"
+                required
+                minlength="3"
+                #usernameInput="ngModel">
+              <div class="invalid-feedback" *ngIf="usernameInput.invalid && usernameInput.touched">
+                Le nom d'utilisateur est requis et doit contenir au moins 3 caractères
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control"
+                [class.is-invalid]="emailInput.invalid && emailInput.touched"
+                id="email"
+                name="email"
+                [(ngModel)]="user.email"
+                required
+                email
+                #emailInput="ngModel">
+              <div class="invalid-feedback" *ngIf="emailInput.invalid && emailInput.touched">
+                Veuillez entrer une adresse email valide
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Mot de passe</label>
+              <input 
+                type="password" 
+                class="form-control"
+                [class.is-invalid]="passwordInput.invalid && passwordInput.touched"
+                id="password"
+                name="password"
+                [(ngModel)]="user.password"
+                required
+                minlength="6"
+                #passwordInput="ngModel">
+              <div class="invalid-feedback" *ngIf="passwordInput.invalid && passwordInput.touched">
+                Le mot de passe doit contenir au moins 6 caractères
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="role" class="form-label">Rôle</label>
+              <select 
+                class="form-select"
+                id="role"
+                name="role"
+                [(ngModel)]="user.role"
+                required>
+                <option *ngFor="let role of userRoles" [value]="role">
+                  {{role}}
+                </option>
+              </select>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="!registerForm.form.valid">
+                S'inscrire
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
