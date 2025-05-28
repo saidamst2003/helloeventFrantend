@@ -1,0 +1,55 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="text-center mb-0">Connexion</h3>
+        </div>
+        <div class="card-body">
+          <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+            <div class="mb-3">
+              <label for="username" class="form-label">Nom d'utilisateur</label>
+              <input 
+                type="text" 
+                class="form-control"
+                [class.is-invalid]="usernameInput.invalid && usernameInput.touched"
+                id="username"
+                name="username"
+                [(ngModel)]="loginData.username"
+                required
+                #usernameInput="ngModel">
+              <div class="invalid-feedback" *ngIf="usernameInput.invalid && usernameInput.touched">
+                Le nom d'utilisateur est requis
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Mot de passe</label>
+              <input 
+                type="password" 
+                class="form-control"
+                [class.is-invalid]="passwordInput.invalid && passwordInput.touched"
+                id="password"
+                name="password"
+                [(ngModel)]="loginData.password"
+                required
+                #passwordInput="ngModel">
+              <div class="invalid-feedback" *ngIf="passwordInput.invalid && passwordInput.touched">
+                Le mot de passe est requis
+              </div>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="!loginForm.form.valid">
+                Se connecter
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
