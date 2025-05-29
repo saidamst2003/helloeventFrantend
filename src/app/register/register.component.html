@@ -66,6 +66,7 @@
                 name="role"
                 [(ngModel)]="user.role"
                 required>
+                <option value="" disabled selected>Sélectionnez un rôle</option>
                 <option *ngFor="let role of userRoles" [value]="role">
                   {{role}}
                 </option>
