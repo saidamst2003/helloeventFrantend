@@ -6,6 +6,14 @@
           <h3 class="text-center mb-0">Inscription</h3>
         </div>
         <div class="card-body">
+          <!-- Messages d'alerte -->
+          <div class="alert alert-success" *ngIf="successMessage" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ successMessage }}
+          </div>
+          <div class="alert alert-danger" *ngIf="errorMessage" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ errorMessage }}
+          </div>
+
           <form (ngSubmit)="onSubmit(registerForm)" #registerForm="ngForm">
             <div class="mb-3">
               <label for="username" class="form-label">Nom d'utilisateur</label>
@@ -13,12 +21,13 @@
                 type="text" 
                 class="form-control"
                 [class.is-invalid]="usernameInput.invalid && usernameInput.touched"
-                id="username"
-                name="username"
+                id="username" 
+                name="username" 
                 [(ngModel)]="user.username"
-                required
+                required 
                 minlength="3"
-                #usernameInput="ngModel">
+                #usernameInput="ngModel"
+                [disabled]="isLoading">
               <div class="invalid-feedback" *ngIf="usernameInput.invalid && usernameInput.touched">
                 Le nom d'utilisateur est requis et doit contenir au moins 3 caractères
               </div>
@@ -30,12 +39,13 @@
                 type="email" 
                 class="form-control"
                 [class.is-invalid]="emailInput.invalid && emailInput.touched"
-                id="email"
-                name="email"
+                id="email" 
+                name="email" 
                 [(ngModel)]="user.email"
-                required
-                email
-                #emailInput="ngModel">
+                required 
+                email 
+                #emailInput="ngModel"
+                [disabled]="isLoading">
               <div class="invalid-feedback" *ngIf="emailInput.invalid && emailInput.touched">
                 Veuillez entrer une adresse email valide
               </div>
@@ -47,12 +57,13 @@
                 type="password" 
                 class="form-control"
                 [class.is-invalid]="passwordInput.invalid && passwordInput.touched"
-                id="password"
-                name="password"
+                id="password" 
+                name="password" 
                 [(ngModel)]="user.password"
-                required
+                required 
                 minlength="6"
-                #passwordInput="ngModel">
+                #passwordInput="ngModel"
+                [disabled]="isLoading">
               <div class="invalid-feedback" *ngIf="passwordInput.invalid && passwordInput.touched">
                 Le mot de passe doit contenir au moins 6 caractères
               </div>
@@ -62,29 +73,42 @@
               <label for="role" class="form-label">Rôle</label>
               <select 
                 class="form-select"
-                id="role"
-                name="role"
+                [class.is-invalid]="roleInput.invalid && roleInput.touched"
+                id="role" 
+                name="role" 
                 [(ngModel)]="user.role"
-                required>
-                <option value="" disabled selected>Sélectionnez un rôle</option>
+                required
+                #roleInput="ngModel"
+                [disabled]="isLoading">
+                <option value="" disabled>Sélectionnez un rôle</option>
                 <option *ngFor="let role of userRoles" [value]="role">
                   {{role}}
                 </option>
               </select>
+              <div class="invalid-feedback" *ngIf="roleInput.invalid && roleInput.touched">
+                Veuillez sélectionner un rôle
+              </div>
             </div>
 
             <div class="d-grid gap-2">
               <button 
                 type="submit" 
                 class="btn btn-primary"
-                [disabled]="!registerForm.form.valid">
-                S'inscrire
+                [disabled]="!registerForm.form.valid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2" role="status"></span>
+                <span *ngIf="!isLoading">S'inscrire</span>
+                <span *ngIf="isLoading">Inscription en cours...</span>
               </button>
             </div>
           </form>
+
+          <div class="text-center mt-3">
+            <p class="mb-0">Déjà un compte ? 
+              <a href="#" (click)="goToLogin()" class="text-decoration-none">Se connecter</a>
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
