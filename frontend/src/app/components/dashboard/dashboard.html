@@ -1,0 +1,21 @@
+ <div class="dashboard">
+      <nav class="navbar">
+        <h1>Dashboard</h1>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </nav>
+      
+      <div class="content">
+        <h2>Welcome to your Dashboard!</h2>
+        <p>This is a protected route that requires authentication.</p>
+        
+        <!-- Example of making authenticated API calls -->
+        <div class="events-section">
+          <h3>Your Events</h3>
+          <div class="loading" *ngIf="isLoading">Loading events...</div>
+          <ul *ngIf="!isLoading && events.length > 0">
+            <li *ngFor="let event of events">{{ event.name }}</li>
+          </ul>
+          <p *ngIf="!isLoading && events.length === 0">No events found.</p>
+        </div>
+      </div>
+    </div>
