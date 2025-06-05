@@ -10,6 +10,7 @@ interface User {
   email?: string;
   firstName?: string;
   lastName?: string;
+  role?: string;
 }
 
 interface RegistrationResponse {
@@ -22,10 +23,9 @@ interface RegistrationResponse {
   selector: 'app-registration',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, HttpClientModule],
-   templateUrl: './registration.html',
+  templateUrl: './registration.html',
   styleUrls: ['./registration.css'],
-  })
-
+})
 export class RegistrationComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
@@ -38,16 +38,16 @@ export class RegistrationComponent {
 
   private readonly API_URL = 'http://localhost:8080/api/auth';
 
-  constructor() {
-    this.registrationForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.email]],
-      firstName: [''],
-      lastName: [''],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
-    });
-  }
+ constructor() {
+  this.registrationForm = this.fb.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', [Validators.required]],
+    role: ['', Validators.required]  
+  });
+}
+
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.registrationForm.get(fieldName);
@@ -57,9 +57,7 @@ export class RegistrationComponent {
   hasPasswordMismatch(): boolean {
     const password = this.registrationForm.get('password')?.value;
     const confirmPassword = this.registrationForm.get('confirmPassword')?.value;
-    
-    return !!(confirmPassword && password !== confirmPassword && 
-             this.registrationForm.get('confirmPassword')?.touched);
+    return !!(confirmPassword && password !== confirmPassword && this.registrationForm.get('confirmPassword')?.touched);
   }
 
   onSubmit(): void {
@@ -88,7 +86,8 @@ export class RegistrationComponent {
       password: formValue.password,
       email: formValue.email || undefined,
       firstName: formValue.firstName || undefined,
-      lastName: formValue.lastName || undefined
+      lastName: formValue.lastName || undefined,
+      role: formValue.role
     };
 
     this.http.post<RegistrationResponse>(`${this.API_URL}/register`, user)
@@ -96,8 +95,6 @@ export class RegistrationComponent {
         next: (response) => {
           this.isLoading = false;
           this.successMessage = 'Inscription réussie ! Redirection vers la page de connexion...';
-          
-          // Redirection après 2 secondes
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);
@@ -105,7 +102,6 @@ export class RegistrationComponent {
         error: (error) => {
           this.isLoading = false;
           console.error('Registration error:', error);
-          
           if (error.status === 400) {
             this.errorMessage = error.error || 'Ce nom d\'utilisateur existe déjà';
           } else if (error.status === 0) {

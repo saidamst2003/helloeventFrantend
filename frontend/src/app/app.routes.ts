@@ -9,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    loadComponent: () => import('./registration/registration').then(c => c.RegistrationComponent),
+    loadComponent: () => import('./components/registration/registration').then(c => c.RegistrationComponent),
     canActivate: [noAuthGuard] // Empêcher l'accès si déjà connecté
   },
   {
